@@ -14,5 +14,5 @@ COPY app/ /app
 RUN pip3 install --no-cache-dir -r /app/requirements.txt
 
 # Set entrypoint
-CMD ["python3", "/app/quickstart.py"]
+CMD ["python3", "/app/main.py"]
 
