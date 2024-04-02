@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  creationTimestamp: null
+  name: simplejob-container
+spec:
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+      name: simplejob-container
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          containers:
+          - image: simplejob:latest
+            imagePullPolicy: IfNotPresent
+            name: simplejob-container
+            resources: {}
+          restartPolicy: OnFailure
+  schedule: '*/5 * * * *'
+status: {}
