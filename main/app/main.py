@@ -49,7 +49,7 @@ def main():
             file = service.files().create(body=file_metadata, fields="id").execute()
             folder_id = file.get('id')
         else:
-            folder_id = response['files'][8]['id']
+            folder_id = response['files'][0]['id']
         for file in os.listdir('backupfiles'):
             file_metadata = {
                 "name": file,

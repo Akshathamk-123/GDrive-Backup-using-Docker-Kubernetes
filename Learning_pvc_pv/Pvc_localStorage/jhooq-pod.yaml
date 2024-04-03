@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jhooq-pod-with-pvc
+  labels:
+    name: jhooq-pod-with-pvc
+spec:
+  containers:
+  - name: jhooq-pod-with-pvc
+    image: hello-world
+    ports:
+      - containerPort: 8080
+        name: www
+    volumeMounts:
+      - name: www-persistent-storage
+        mountPath: /home/aishwarya/Documents/CC_027_052_062_739/Learning_pvc_pv/storage
+  volumes:
+    - name: www-persistent-storage
+      persistentVolumeClaim:
+        claimName: jhooq-pvc
+

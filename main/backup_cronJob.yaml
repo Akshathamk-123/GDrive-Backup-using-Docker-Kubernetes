@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-cronjob-container
+spec:
+  schedule: "*/5 * * * *"  # Run every minute
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backup-cronjob-container
+            image: backup_cronjob:latest
+            imagePullPolicy: IfNotPresent
+            volumeMounts:
+            - name: data-volume
+              mountPath: /home/aishwarya/Documents/CC_027_052_062_739/main/backupfiles
+          restartPolicy: OnFailure
+          volumes:
+          - name: data-volume
+            persistentVolumeClaim:
+              claimName: data-volume-claim
+
