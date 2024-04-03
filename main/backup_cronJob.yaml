@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: backup-cronjob-container
 spec:
-  schedule: "*/1 * * * *"  # Run every minute
+  schedule: "*/5 * * * *"  # Run every minute
   jobTemplate:
     spec:
       template:
@@ -14,7 +14,7 @@ spec:
             imagePullPolicy: IfNotPresent
             volumeMounts:
             - name: data-volume
-              mountPath: /home/aishwarya/Documents/CC_027_052_062_739/main/app/backupfiles
+              mountPath: /home/aishwarya/Documents/CC_027_052_062_739/main/backupfiles
           restartPolicy: OnFailure
           volumes:
           - name: data-volume
