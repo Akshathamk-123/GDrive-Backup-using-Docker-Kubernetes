@@ -38,18 +38,18 @@ def main():
     try:
         service = build("drive", "v3", credentials=creds)
         response = service.files().list(
-            q="name='BackupFolder' and mimeType='application/vnd.google-apps.folder'",
+            q="name='BackupFolder2' and mimeType='application/vnd.google-apps.folder'",
             spaces='drive'
         ).execute()
         if not response['files']:
             file_metadata = {
-                "name": "BackupFolder",
+                "name": "BackupFolder2",
                 "mimeType": "application/vnd.google-apps.folder"
             }    
             file = service.files().create(body=file_metadata, fields="id").execute()
             folder_id = file.get('id')
         else:
-            folder_id = response['files'][8]['id']
+            folder_id = response['files'][0]['id']
         for file in os.listdir('backupfiles'):
             file_metadata = {
                 "name": file,
