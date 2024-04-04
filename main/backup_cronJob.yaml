@@ -3,21 +3,21 @@ kind: CronJob
 metadata:
   name: backup-cronjob-container
 spec:
-  schedule: "*/5 * * * *"  # Run every minute
+  schedule: "*/5 */8 * * *"  # Run every 8 hrs
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: backup-cronjob-container
-            image: backup_cronjob:latest
+            image: aishwarya166/cc_project5:latest
             imagePullPolicy: IfNotPresent
             volumeMounts:
-            - name: data-volume
+            - name: backup-volume
               mountPath: /home/aishwarya/Documents/CC_027_052_062_739/main/backupfiles
           restartPolicy: OnFailure
           volumes:
-          - name: data-volume
+          - name: backup-volume
             persistentVolumeClaim:
-              claimName: data-volume-claim
+              claimName: backup-pvc  # Ensure this matches your PVC name
 

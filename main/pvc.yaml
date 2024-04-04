@@ -1,11 +1,14 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: data-volume-claim
+  name: backup-pvc
 spec:
+  volumeName: backup-pv
+  volumeMode: Filesystem
+  storageClassName: local-storage
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 1Gi  # Adjust this to match your PV size
 
