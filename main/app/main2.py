@@ -1,4 +1,5 @@
 import os
+import subprocess
 import time
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -6,11 +7,16 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/drive"]
+
+# Install watchdog module
+subprocess.run(['pip', 'install', 'watchdog>=2.1.2'])
+
+# Import watchdog after installation
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 import os
 
@@ -73,12 +79,12 @@ def main():
 
     service = build("drive", "v3", credentials=creds)
     response = service.files().list(
-        q="name='BackupFolder4' and mimeType='application/vnd.google-apps.folder'",
+        q="name='BackupFolder5' and mimeType='application/vnd.google-apps.folder'",
         spaces='drive'
     ).execute()
     if not response['files']:
         file_metadata = {
-            "name": "BackupFolder4",
+            "name": "BackupFolder5",
             "mimeType": "application/vnd.google-apps.folder"
         }    
         file = service.files().create(body=file_metadata, fields="id").execute()

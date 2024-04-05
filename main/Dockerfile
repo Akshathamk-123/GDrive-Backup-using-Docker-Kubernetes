@@ -17,5 +17,6 @@ COPY backupfiles /usr/src/main/backupfiles
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Set entrypoint
-CMD ["python3", "main.py"]
+CMD ["python3", "main2.py"]
+
 
