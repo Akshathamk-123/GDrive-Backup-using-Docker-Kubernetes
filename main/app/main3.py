@@ -1,7 +1,6 @@
 import os
 import subprocess
 import time
-import sys
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -13,7 +12,7 @@ from googleapiclient.http import MediaFileUpload
 SCOPES = ["https://www.googleapis.com/auth/drive"]
 
 # Install watchdog module
-#subprocess.run(['pip', 'install', 'watchdog>=2.1.2'])
+subprocess.run(['pip', 'install', 'watchdog>=2.1.2'])
 
 # Import watchdog after installation
 from watchdog.observers import Observer
@@ -35,7 +34,7 @@ def upload_to_google_drive(file_path, service, folder_id, existing_files):
     """Upload or update file in Google Drive."""
     file_name = os.path.basename(file_path)
     if file_name.startswith('.goutputstream'):
-        #print(f"Skipping file: {file_name}")
+        print(f"Skipping file: {file_name}")
         return  # Skip uploading this file
     try:
         file_id = existing_files.get(file_name)
@@ -66,49 +65,29 @@ class MyHandler(FileSystemEventHandler):
         self.service = service
         self.folder_id = folder_id
         self.existing_files = existing_files
-        self.start_time = time.time()  # Record the start time
-
-    def should_end(self):
-        return time.time() - self.start_time >= 30  # Return True if 4 minutes have passed
-
 
     def on_created(self, event):
         if not event.is_directory and not event.src_path.startswith('.goutputstream'):
             file_path = event.src_path
             if os.path.exists(file_path):  # Check if the file exists
-                time.sleep(1)  # Introduce a short delay
+                time.sleep(3)  # Introduce a short delay
                 upload_to_google_drive(file_path, self.service, self.folder_id, self.existing_files)
-                
+
     def on_moved(self, event):
         if not event.is_directory and not event.dest_path.startswith('.goutputstream'):
-            src_file_path = event.src_path
-            dest_file_path = event.dest_path
-            if os.path.exists(dest_file_path):  # Check if the destination file exists
-                time.sleep(1)  # Introduce a short delay
-                if os.path.basename(src_file_path) != os.path.basename(dest_file_path):
-                    # Renaming detected
-                    try:
-                        # First, get the file ID of the old file in Google Drive
-                        existing_files = list_files_in_folder(self.service, self.folder_id)
-                        file_id = existing_files.get(os.path.basename(src_file_path))
-                        if file_id:
-                            # Update the file name in Google Drive
-                            file_metadata = {'name': os.path.basename(dest_file_path)}
-                            self.service.files().update(fileId=file_id, body=file_metadata).execute()
-                            print(f"Renamed file: {os.path.basename(src_file_path)} to {os.path.basename(dest_file_path)}")
-                    except HttpError as e:
-                        print("Error: " + str(e))
-
-
+            file_path = event.dest_path
+            if os.path.exists(file_path):  # Check if the file exists
+                time.sleep(3)  # Introduce a short delay
+                upload_to_google_drive(file_path, self.service, self.folder_id, self.existing_files)
+    
     def on_modified(self, event):
         if not event.is_directory and not event.src_path.startswith('.goutputstream'):
             file_path = event.src_path
             if os.path.exists(file_path):  # Check if the file exists
-                time.sleep(1)  # Introduce a short delay
+                time.sleep(3)  # Introduce a short delay
                 upload_to_google_drive(file_path, self.service, self.folder_id, self.existing_files)
 
 def main():
-    start_time = time.time()  # Record the start time
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -130,12 +109,12 @@ def main():
 
     service = build("drive", "v3", credentials=creds)
     response = service.files().list(
-        q="name='BackupFolder2' and mimeType='application/vnd.google-apps.folder'",
+        q="name='BackupFolder6' and mimeType='application/vnd.google-apps.folder'",
         spaces='drive'
     ).execute()
     if not response['files']:
         file_metadata = {
-            "name": "BackupFolder2",
+            "name": "BackupFolder6",
             "mimeType": "application/vnd.google-apps.folder"
         }    
         file = service.files().create(body=file_metadata, fields="id").execute()
@@ -156,14 +135,8 @@ def main():
     observer.schedule(event_handler, path='backupfiles', recursive=False)
     observer.start()
 
-    
-
     try:
-        while not event_handler.should_end():
-            #print(time.time()-start_time )
-            if time.time()-start_time >= 30:
-                observer.stop()  # Stop the observer if 30 seconds have passed
-                break  # Exit loop if 30 seconds have passed
+        while True:
             time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()

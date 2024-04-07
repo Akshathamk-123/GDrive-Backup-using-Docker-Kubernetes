@@ -1,7 +1,6 @@
 import os
 import subprocess
 import time
-import sys
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -13,7 +12,7 @@ from googleapiclient.http import MediaFileUpload
 SCOPES = ["https://www.googleapis.com/auth/drive"]
 
 # Install watchdog module
-#subprocess.run(['pip', 'install', 'watchdog>=2.1.2'])
+subprocess.run(['pip', 'install', 'watchdog>=2.1.2'])
 
 # Import watchdog after installation
 from watchdog.observers import Observer
@@ -108,7 +107,6 @@ class MyHandler(FileSystemEventHandler):
                 upload_to_google_drive(file_path, self.service, self.folder_id, self.existing_files)
 
 def main():
-    start_time = time.time()  # Record the start time
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -130,12 +128,12 @@ def main():
 
     service = build("drive", "v3", credentials=creds)
     response = service.files().list(
-        q="name='BackupFolder2' and mimeType='application/vnd.google-apps.folder'",
+        q="name='BackupFolder6' and mimeType='application/vnd.google-apps.folder'",
         spaces='drive'
     ).execute()
     if not response['files']:
         file_metadata = {
-            "name": "BackupFolder2",
+            "name": "BackupFolder6",
             "mimeType": "application/vnd.google-apps.folder"
         }    
         file = service.files().create(body=file_metadata, fields="id").execute()
@@ -156,14 +154,8 @@ def main():
     observer.schedule(event_handler, path='backupfiles', recursive=False)
     observer.start()
 
-    
-
     try:
         while not event_handler.should_end():
-            #print(time.time()-start_time )
-            if time.time()-start_time >= 30:
-                observer.stop()  # Stop the observer if 30 seconds have passed
-                break  # Exit loop if 30 seconds have passed
             time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()

@@ -1,15 +1,15 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: backup-container
+  name: backupProject
 spec:
-  schedule: "*/5 * * * *"  # Run every 8 hrs
+  schedule: "*/1 * * * *"  # Run every 1 min
   jobTemplate:
     spec:
       template:
         spec:
           containers:
-          - name: backup-container
+          - name: backup-backupProject
             image: aishwarya166/cc_project_backup:latest
             imagePullPolicy: IfNotPresent
             volumeMounts:
