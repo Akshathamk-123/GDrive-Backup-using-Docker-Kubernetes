@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
   - name: jhooq-pod-with-pvc
-    image: hello-world
+    image: aishwarya166/kubernetes:cc_project5
     ports:
       - containerPort: 8080
         name: www

@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: backup-pvc
+  name: backup-pvc-2
 spec:
-  volumeName: backup-pv
+  volumeName: backup-pv-2
   volumeMode: Filesystem
   storageClassName: local-storage
   accessModes:

@@ -1,0 +1,7 @@
+version: '3'
+services:
+  app:
+    image: aishwarya166/cc_project_backup:latest
+    volumes:
+      - /home/aishwarya/Documents/CC_027_052_062_739/main/backupfiles:/usr/src/main/backupfiles
+

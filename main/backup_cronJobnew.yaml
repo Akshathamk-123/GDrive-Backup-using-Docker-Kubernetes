@@ -1,16 +1,16 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: backup-cronjob-container
+  name: backup-container
 spec:
-  schedule: "*/5 */8 * * *"  # Run every 8 hrs
+  schedule: "*/1 * * * *"  # Run every 1 min
   jobTemplate:
     spec:
       template:
         spec:
           containers:
-          - name: backup-cronjob-container
-            image: aishwarya166/cc_project5:latest
+          - name: backup-container
+            image: aishwarya166/cc_project_backup:latest
             imagePullPolicy: IfNotPresent
             volumeMounts:
             - name: backup-volume
@@ -19,5 +19,5 @@ spec:
           volumes:
           - name: backup-volume
             persistentVolumeClaim:
-              claimName: backup-pvc  # Ensure this matches your PVC name
+              claimName: backup-pvc2  # Ensure this matches your PVC name
 

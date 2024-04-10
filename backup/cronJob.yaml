@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cont-job-2
+spec:
+  schedule: "*/3 * * * *"  # Run every 8 hrs
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cont-job-2
+            image: aishwarya166/cc_docker_image:latest
+            imagePullPolicy: Always
+            volumeMounts:
+            - name: backup-volume
+              mountPath: /home/aishwarya/Documents/CC_027_052_062_739/backup/backupfiles
+          restartPolicy: OnFailure
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: backup-pvc-2  # Ensure this matches your PVC name
+
