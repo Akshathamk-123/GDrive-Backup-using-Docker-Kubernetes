@@ -1,7 +1,7 @@
 version: '3'
 services:
   app:
-    image: aishwarya166/cc_docker_image:latest
+    image: aishwarya166/cc_cronbackup_image:latest
     volumes:
-      - /home/aishwarya/Documents/CC_027_052_062_739/backup/backupfiles:/usr/src/backup/backupfiles
+      - /home/aishwarya/CC_027_052_062_739/backup/backupfiles:/usr/src/backup/backupfiles
 

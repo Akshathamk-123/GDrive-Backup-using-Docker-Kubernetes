@@ -26,5 +26,5 @@ COPY entrypoint.sh /usr/src/backup/entrypoint.sh
 RUN chmod +x /usr/src/backup/entrypoint.sh
 
 # Set the default command to execute when the container starts
-CMD ["./entrypoint.sh"]
-
+#CMD ["./entrypoint.sh"]
+CMD ["python3", "main.py"]

@@ -1,6 +1,7 @@
 import os
 import subprocess
 import time
+import sys
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -10,13 +11,6 @@ from googleapiclient.http import MediaFileUpload
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/drive"]
-
-# Install watchdog module
-subprocess.run(['pip', 'install', 'watchdog>=2.1.2'])
-
-# Import watchdog after installation
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
 
 import os
 
@@ -34,9 +28,10 @@ def upload_to_google_drive(file_path, service, folder_id, existing_files):
     """Upload or update file in Google Drive."""
     file_name = os.path.basename(file_path)
     if file_name.startswith('.goutputstream'):
-        print(f"Skipping file: {file_name}")
+        #print(f"Skipping file: {file_name}")
         return  # Skip uploading this file
     try:
+        # Check if the file already exists in Google Drive
         file_id = existing_files.get(file_name)
         media = MediaFileUpload(file_path)
         if file_id:  # File already exists, update it
@@ -59,35 +54,8 @@ def upload_to_google_drive(file_path, service, folder_id, existing_files):
     except HttpError as e:
         print("Error: " + str(e))
 
-
-class MyHandler(FileSystemEventHandler):
-    def __init__(self, service, folder_id, existing_files):
-        self.service = service
-        self.folder_id = folder_id
-        self.existing_files = existing_files
-
-    def on_created(self, event):
-        if not event.is_directory and not event.src_path.startswith('.goutputstream'):
-            file_path = event.src_path
-            if os.path.exists(file_path):  # Check if the file exists
-                time.sleep(3)  # Introduce a short delay
-                upload_to_google_drive(file_path, self.service, self.folder_id, self.existing_files)
-
-    def on_moved(self, event):
-        if not event.is_directory and not event.dest_path.startswith('.goutputstream'):
-            file_path = event.dest_path
-            if os.path.exists(file_path):  # Check if the file exists
-                time.sleep(3)  # Introduce a short delay
-                upload_to_google_drive(file_path, self.service, self.folder_id, self.existing_files)
-    
-    def on_modified(self, event):
-        if not event.is_directory and not event.src_path.startswith('.goutputstream'):
-            file_path = event.src_path
-            if os.path.exists(file_path):  # Check if the file exists
-                time.sleep(3)  # Introduce a short delay
-                upload_to_google_drive(file_path, self.service, self.folder_id, self.existing_files)
-
 def main():
+
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -109,12 +77,12 @@ def main():
 
     service = build("drive", "v3", credentials=creds)
     response = service.files().list(
-        q="name='BackupFolder6' and mimeType='application/vnd.google-apps.folder'",
+        q="name='BackupFolder3' and mimeType='application/vnd.google-apps.folder'",
         spaces='drive'
     ).execute()
     if not response['files']:
         file_metadata = {
-            "name": "BackupFolder6",
+            "name": "BackupFolder3",
             "mimeType": "application/vnd.google-apps.folder"
         }    
         file = service.files().create(body=file_metadata, fields="id").execute()
@@ -130,17 +98,7 @@ def main():
         for file in files:
             upload_to_google_drive(os.path.join(root, file), service, folder_id, existing_files)
 
-    observer = Observer()
-    event_handler = MyHandler(service, folder_id, existing_files)
-    observer.schedule(event_handler, path='backupfiles', recursive=False)
-    observer.start()
-
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
-    observer.join()
+ 
 
 if __name__ == "__main__":
     main()

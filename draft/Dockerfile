@@ -4,8 +4,7 @@ FROM ubuntu:latest
 # Update package lists and install Python 3, pip3, and watchdog
 RUN apt-get update && \
     apt-get install -y python3 python3-pip && \
-    python3 -m pip install --upgrade pip && \
-    pip3 install watchdog==2.1.2
+    python3 -m pip install --upgrade pip 
 
 # Set the working directory inside the container
 WORKDIR /usr/src/main
@@ -20,5 +19,5 @@ COPY backupfiles /usr/src/main/backupfiles
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Set the default command to execute when the container starts
-CMD ["python3", "main2.py"]
+CMD ["python3", "main.py"]
 
