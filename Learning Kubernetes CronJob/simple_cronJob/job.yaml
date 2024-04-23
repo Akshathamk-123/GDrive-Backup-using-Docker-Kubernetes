@@ -19,5 +19,5 @@ spec:
             name: simplejob-container
             resources: {}
           restartPolicy: OnFailure
-  schedule: '0 0 * * *'
+  schedule: "*/5 */8 * * *"
 status: {}

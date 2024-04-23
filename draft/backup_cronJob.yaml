@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
           - name: backup-cronjob-container
-            image: aishwarya166/cc_project5:latest
+            image: aishwarya166/cc_new_repo:latest
             imagePullPolicy: IfNotPresent
             volumeMounts:
             - name: backup-volume

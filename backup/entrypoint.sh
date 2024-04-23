@@ -4,7 +4,7 @@
 CRON_INTERVAL=60
 
 # Name of the Docker container
-DOCKER_CONTAINER_NAME="inspiring_antonelli"
+DOCKER_CONTAINER_NAME="quizzical_keldysh"
 
 # Function to restart the container and run main.py
 restart_container() {
@@ -25,7 +25,7 @@ restart_container() {
     # Run main.py inside the container
     docker-compose exec -d $DOCKER_CONTAINER_NAME python3 main.py
     
-    docker push aishwarya166/cc_docker_image:latest                                      
+    docker push aishwarya166/cc_cronbackup_image:latest                                      
     
     # Sleep for the duration specified in the CronJob schedule
     sleep $CRON_INTERVAL

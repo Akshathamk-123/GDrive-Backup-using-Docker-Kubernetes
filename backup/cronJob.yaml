@@ -1,23 +1,25 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: cont-job-2
+  name: cronbackup
 spec:
-  schedule: "*/3 * * * *"  # Run every 8 hrs
+  schedule: "*/2 * * * *"  # Run every 2 mins
   jobTemplate:
     spec:
       template:
         spec:
           containers:
-          - name: cont-job-2
-            image: aishwarya166/cc_docker_image:latest
+          - name: cronbackup
+            image: aishwarya166/cc_cronbackup_image:latest
+            #command: ["sh", "-c", "/usr/src/backup/entrypoint.sh"]
+            #command: ["python3", "/usr/src/backup/main.py"]
             imagePullPolicy: Always
             volumeMounts:
             - name: backup-volume
-              mountPath: /home/aishwarya/Documents/CC_027_052_062_739/backup/backupfiles
+              mountPath: /home/aishwarya/CC_027_052_062_739/backup/backupfiles
           restartPolicy: OnFailure
           volumes:
           - name: backup-volume
             persistentVolumeClaim:
-              claimName: backup-pvc-2  # Ensure this matches your PVC name
+              claimName: cronbackup-pvc
 
