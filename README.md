@@ -1,7 +1,16 @@
 # 027_052_062_739
 
 ## GDrive Backup using Docker & Kubernetes
+This Project is a part of Academic Mini-Project for the subject Cloud Computing.
 
+### About the Project
+Description: Creating a backup service that periodically backs up the
+contents of a folder to Google Drive using Docker and Kubernetes
+involves several steps.
+In this project, you will work with Docker and Kubernetes to create a
+Backup service.
+
+### How it works
 Python script `main2.py` monitors a directory (`backupfiles`), uploads any newly created, modified, or moved files to Google Drive using the Google Drive API. There's a Dockerfile to containerize your application, Docker Compose to manage the Docker container, a shell script (`entrypoint.sh`) to restart the container when changes are detected in the `backupfiles` directory, and Kubernetes manifests for setting up a CronJob to periodically trigger the backup process, and Persistent Volume (PV) and Persistent Volume Claim (PVC) for storing backup files persistently.
 
 ### Prerequisites:
